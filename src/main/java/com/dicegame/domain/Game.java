@@ -1,13 +1,16 @@
 package com.dicegame.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game {
 	
 	private int gameID;
-	private Dice dice1 = new Dice();
-	private Dice dice2 = new Dice();
+	private List<Dice> dices = new ArrayList<>();
+	private final int totalDices = 6;
 	private static int counter=1;
 
-	public Game() throws Exception {
+	public Game() {
 		this.gameID = counter;
 		counter++;
 	}
@@ -16,25 +19,35 @@ public class Game {
 		return gameID;
 	}
 
-	public Dice getDice1() {
-		return dice1;
+	public List<Integer> getDicesResults() {
+		List<Integer> results = new ArrayList<>();
+		for(Dice dice : dices) {
+			results.add(dice.getValue());
+		} return results;
 	}
-
-	public Dice getDice2() {
-		return dice2;
+	
+	public void addDices() {
+		for (int i =0; i < totalDices; i++) {
+			dices.add(new Dice());
+		}
 	}
 
 	public boolean playGame() {
-		dice1.rollDice();
-		dice2.rollDice();
+		for (Dice dice : dices)
+		dice.rollDice();		
 		return hasWon();
 	}
 	
-	public int getDicesSum() {
-		return dice1.getValue() + dice2.getValue();
+	public boolean hasWon() {
+		return hasAllDiceSameValue(5) || hasAllDiceSameValue(6);
 	}
 	
-	public boolean hasWon() {
-		return (getDicesSum()==7);
+	public boolean hasAllDiceSameValue(int value) {		
+		for (Dice dice: dices) {
+			if (dice.getValue() != value) {
+				return false;
+			}
+		}
+		return true;	
 	}
 }

@@ -1,21 +1,30 @@
 package com.dicegame.persistence;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.dicegame.domain.Player;
+import com.dicegame.utilities.InvalidParamException;
 import com.dicegame.utilities.NotFoundException;
 
 public class PlayerRepository {
 		
-	private static List<Player> players=new ArrayList<>();
+	private static Set<Player> players=new HashSet<>();
 	
 	public PlayerRepository() {
 	}
 	
-	public void addPlayer(Player player) throws Exception{
-		if(player==null) throw new Exception();
-		players.add(player);
+	public void addPlayer(Player player) throws InvalidParamException{
+		if(player==null)
+			throw new InvalidParamException();
+			try {
+				players.add(player);
+				
+			} catch (Exception e) {
+				throw new InvalidParamException();
+			}
 	}
 	
 	public List<Player> getAllPlayers(){
@@ -29,4 +38,8 @@ public class PlayerRepository {
        }      
        throw new NotFoundException(); 
 	}
+
+    public void deletePlayerById(int id) throws Exception {
+        players.remove(getPlayerByID(id));
+    }
 }

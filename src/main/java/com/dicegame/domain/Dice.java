@@ -19,3 +19,4 @@ public class Dice {
 		return value;
 	}
 }
+ //como hacerlo si tienes dados de mas de 6 caras?

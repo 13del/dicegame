@@ -1,6 +1,11 @@
 package com.dicegame.application.DTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dicegame.domain.Dice;
 import com.dicegame.domain.Game;
+import com.dicegame.utilities.NotFoundException;
 import com.google.gson.annotations.Expose;
 
 public class GameDTO {
@@ -8,16 +13,17 @@ public class GameDTO {
 	@Expose
 	public int gameID;
 	@Expose
-	public int dice1, dice2;
+	public List<Integer> dicesResults = new ArrayList<>();
 	@Expose
 	public boolean hasWon;
 	
 	//valor daus amb int i boolean hasWon
-	public GameDTO(Game game) {
+	public GameDTO(Game game) throws NotFoundException {
+		if (game == null)
+			throw new NotFoundException();
 		this.gameID = game.getGameID();
 		this.hasWon = game.hasWon();
-		this.dice1 = game.getDice1().getValue();
-		this.dice2 = game.getDice2().getValue();
+		this.dicesResults= game.getDicesResults();
 	}
 
 	public int getGameID() {

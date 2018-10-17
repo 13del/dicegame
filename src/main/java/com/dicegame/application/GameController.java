@@ -16,18 +16,16 @@ public class GameController {
 	public GameController() {
 	}
 
-	//playGame: fa una tirada i l'emmagatzema en el jugador POST
-	public GameDTO playGame (int playerID) throws Exception{
+	//POST /players/{id}/games/ : un jugador específic realitza una tirada dels daus.
+	public GameDTO playGame (int playerID) throws NotFoundException{
 		Game game = new Game();
+		game.addDices();
 		game.playGame();
 		Player player = playerRepository.getPlayerByID(playerID);
 		player.addGame(game);
-		//buscar el player i afegir el joc.
-		//retornar el jocdto
 		return new GameDTO(game);
 	}
-
-	//listResults: torna el llistat de les tirades del jugador GET
+	//GET /players/{id}/games: retorna el llistat de jugades per un jugador.
 	public List<GameDTO> listGames(int playerID) throws NotFoundException {
 		List<GameDTO> gameDTOList = new ArrayList <>();	
 		Player player = playerRepository.getPlayerByID(playerID);		
@@ -37,6 +35,11 @@ public class GameController {
 		if (gameDTOList.isEmpty())
 			throw new NotFoundException();
 		return gameDTOList;
+	}
+	//DELETE /players/{id}/games: elimina les tirades del jugador.
+	public void deleteGamesByPlayerID(int playerID) throws NotFoundException {
+        Player player = playerRepository.getPlayerByID(playerID);
+        player.getAllGames().clear();		
 	}	
 }
 
